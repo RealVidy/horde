@@ -46,8 +46,9 @@ defmodule Horde.NodeListener do
 
   defp listener_name(cluster), do: Module.concat(cluster, NodeListener)
 
+  # Duct tape: timeout set to `:infinity`; otherwise it crashes miserably when starting 2+ nodes concurrently.
   defp set_members(cluster),
-    do: :ok = Horde.Cluster.set_members(cluster, make_members(cluster))
+    do: :ok = Horde.Cluster.set_members(cluster, make_members(cluster), :infinity)
 
   defp nodes(), do: Node.list([:visible, :this])
 end
